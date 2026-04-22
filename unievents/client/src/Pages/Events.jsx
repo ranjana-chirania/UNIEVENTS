@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { eventsApi } from "../api/eventsApi";
 
 function Events() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/events")
-      .then((res) => res.json())
+    eventsApi
+      .getAll()
       .then((data) => setEvents(data))
       .catch((err) => console.log(err));
   }, []);

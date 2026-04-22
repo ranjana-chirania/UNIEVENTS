@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import RegisterForm from "./RegisterForm";
+import { eventsApi } from "../api/eventsApi";
 
 function EventDetails() {
   const { id } = useParams();
@@ -10,9 +11,7 @@ function EventDetails() {
 
   // ✅ NEW FUNCTION (same logic, bas separate kiya)
   const fetchEvent = () => {
-    fetch(`http://localhost:3000/api/events/${id}`)
-      .then((res) => res.json())
-      .then((data) => setEvent(data));
+    eventsApi.getById(id).then((data) => setEvent(data));
   };
 
   // ✅ UPDATED useEffect

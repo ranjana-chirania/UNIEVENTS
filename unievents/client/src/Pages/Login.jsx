@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { authApi } from "../api/authApi";
 
 function Login() {
   const [form, setForm] = useState({
@@ -7,21 +7,11 @@ function Login() {
     password: "",
   });
 
-  const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
+      const data = await authApi.login(form);
 
       // ✅ SINGLE BLOCK (fix)
       if (data.success) {

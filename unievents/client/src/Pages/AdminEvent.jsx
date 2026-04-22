@@ -1,14 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { eventsApi } from "../api/eventsApi";
 
 function AdminEvent() {
   const { id } = useParams();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/admin/event/${id}/registrations`)
-      .then(res => res.json())
-      .then(data => setUsers(data));
+    eventsApi.getRegistrations(id).then((data) => setUsers(data));
   }, [id]);
 
   return (

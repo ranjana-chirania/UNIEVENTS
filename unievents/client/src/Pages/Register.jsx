@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authApi } from "../api/authApi";
 
 function Register() {
   const [form, setForm] = useState({
@@ -14,15 +15,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/api/register-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
+      const data = await authApi.register(form);
 
       if (data.success) {
         alert("Registered Successfully ✅");

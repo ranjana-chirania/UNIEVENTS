@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { aiApi } from "../api/aiApi";
+import { eventsApi } from "../api/eventsApi";
 
 const initialEventState = {
   title: "",
@@ -37,24 +39,12 @@ function New() {
     setAiMessage("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/ai/generate-event-description", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: event.title,
-          category: event.category,
-          location: event.location,
-          date: event.date,
-        }),
+      const data = await aiApi.generateEventDescription({
+        title: event.title,
+        category: event.category,
+        location: event.location,
+        date: event.date,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Could not generate description");
-      }
 
       setEvent((currentEvent) => ({
         ...currentEvent,
@@ -74,23 +64,11 @@ function New() {
     setSubmitMessage("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...event,
-          price: Number(event.price) || 0,
-          maxAttendees: Number(event.maxAttendees),
-        }),
+      await eventsApi.create({
+        ...event,
+        price: Number(event.price) || 0,
+        maxAttendees: Number(event.maxAttendees),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Could not create event");
-      }
 
       setSubmitMessage("Event created successfully.");
       setAiMessage("");
